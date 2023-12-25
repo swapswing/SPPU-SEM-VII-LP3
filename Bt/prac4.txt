@@ -1,0 +1,36 @@
+//Write a program in solidity to create Student data. Use the following constructs:
+// Structures
+// Arrays
+// Fallback
+//Deploy this as smart contract on Ethereum and Observe the transaction fee and Gas values.
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract StudentData {
+    struct Student {
+        string name;
+        uint256 age;
+        string major;
+    }
+
+    Student[] public students;
+
+    event StudentCreated(string name, uint256 age, string major);
+    event FundsReceived(address sender, uint256 amount);
+
+    receive() external payable {
+        // The receive function is used to receive ether and log the transaction.
+        emit FundsReceived(msg.sender, msg.value);
+    }
+
+    function createStudent(string memory _name, uint256 _age, string memory _major) public {
+        Student memory newStudent = Student(_name, _age, _major);
+        students.push(newStudent);
+
+        emit StudentCreated(_name, _age, _major);
+    }
+
+    function getStudentCount() public view returns (uint256) {
+        return students.length;
+    }
+}
